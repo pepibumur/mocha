@@ -130,7 +130,7 @@ function invokeSubMocha(args, fn, cwd) {
 
 function _spawnMochaWithListeners(args, fn, cwd) {
   var output = '';
-  var mocha = spawn(process.execPath, args, {cwd: cwd});
+  var mocha = spawn(process.execPath, args, {cwd: cwd, env: {}});
   var listener = function(data) {
     output += data;
   };

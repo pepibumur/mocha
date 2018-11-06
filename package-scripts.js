@@ -64,7 +64,8 @@ module.exports = {
             'test.node.compilers',
             'test.node.requires',
             'test.node.reporters',
-            'test.node.only'
+            'test.node.only',
+            'test.node.opts'
           ].join(' ')}`,
           description: 'Run Node.js tests'
         },
@@ -101,6 +102,14 @@ module.exports = {
             '--timeout 5000 --slow 500 "test/integration/*.spec.js"'
           ),
           description: 'Run Node.js integration tests',
+          hiddenFromHelp: true
+        },
+        opts: {
+          script: test(
+            'opts',
+            '--opts test/opts/mocha.opts test/opts/opts.spec.js'
+          ),
+          description: 'Run tests concerning mocha.opts',
           hiddenFromHelp: true
         },
         jsapi: {

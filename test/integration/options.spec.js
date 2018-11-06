@@ -433,7 +433,7 @@ describe('options', function() {
           if (error) {
             return done(error);
           }
-          expect(result.output, 'to contain', 'Usage:');
+          expect(result.output, 'to contain', 'Run tests with Mocha');
           done();
         },
         path.join(__dirname, 'fixtures', 'options', 'help')

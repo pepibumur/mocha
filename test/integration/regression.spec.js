@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var run = require('./helpers').runMocha;
 var runJSON = require('./helpers').runMochaJSON;
@@ -24,19 +23,6 @@ describe('regressions', function() {
       expect(occurences('testbody3'), 'to be', 1);
       done();
     });
-  });
-
-  it('should not duplicate mocha.opts args in process.argv', function() {
-    var processArgv = process.argv.join('');
-    var mochaOpts = fs
-      .readFileSync(path.join(__dirname, '..', 'mocha.opts'), 'utf-8')
-      .replace(/^#.*$/gm, '')
-      .split(/[\s]+/)
-      .join('');
-    expect(processArgv.indexOf(mochaOpts), 'not to be', -1).and(
-      'to be',
-      processArgv.lastIndexOf(mochaOpts)
-    );
   });
 
   it("issue-1794: Can't --require custom UI and use it", function(done) {
