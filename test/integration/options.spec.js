@@ -436,7 +436,7 @@ describe('options', function() {
           expect(result.output, 'to contain', 'Run tests with Mocha');
           done();
         },
-        path.join(__dirname, 'fixtures', 'options', 'help')
+        {cwd: path.join(__dirname, 'fixtures', 'options', 'help')}
       );
     });
   });
@@ -514,22 +514,24 @@ describe('options', function() {
           this.timeout(0);
           this.slow(3000);
           // executes Mocha in a subprocess
-          var mocha = runRaw('exit.fixture.js', ['--watch'], function(
-            err,
-            data
-          ) {
-            // After the process ends, this callback is ran
-            clearTimeout(t);
-            if (err) {
-              done(err);
-              return;
-            }
+          var mocha = runRaw(
+            'exit.fixture.js',
+            ['--watch'],
+            function(err, data) {
+              // After the process ends, this callback is ran
+              clearTimeout(t);
+              if (err) {
+                done(err);
+                return;
+              }
 
-            var expectedCloseCursor = '\u001b[?25h';
-            expect(data.output, 'to contain', expectedCloseCursor);
-            expect(data.code, 'to be', 130);
-            done();
-          });
+              var expectedCloseCursor = '\u001b[?25h';
+              expect(data.output, 'to contain', expectedCloseCursor);
+              expect(data.code, 'to be', 130);
+              done();
+            },
+            {stdio: 'pipe'}
+          );
           var t = setTimeout(function() {
             // kill the child process
             mocha.kill('SIGINT');

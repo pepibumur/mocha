@@ -12,6 +12,8 @@ module.exports = {
    * includes the number of passing, pending, and failing tests, as well as the
    * exit code. Useful for testing different reporters.
    *
+   * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
+   * want it.
    * Example response:
    * {
    *   pending: 0,
@@ -23,67 +25,90 @@ module.exports = {
    *
    * @param {string} fixturePath - Path to fixture .js file
    * @param {Array<string>} args - Extra args to mocha executable
-   * @param {Function} done - Callback
+   * @param {Function} fn - Callback
+   * @param {Object} [opts] - Options for `spawn()`
    */
-  runMocha: function(fixturePath, args, done) {
+  runMocha: function(fixturePath, args, fn, opts) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(args.concat(['-C', path]), function(err, res) {
-      if (err) {
-        return done(err);
-      }
+    invokeMocha(
+      args.concat(['-C', path]),
+      function(err, res) {
+        if (err) {
+          return fn(err);
+        }
 
-      done(null, getSummary(res));
-    });
+        fn(null, getSummary(res));
+      },
+      opts
+    );
   },
 
   /**
    * Invokes the mocha binary for the given fixture using the JSON reporter,
    * returning the parsed output, as well as exit code.
    *
+   * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
+   * want it.
    * @param {string} fixturePath - Path from __dirname__
    * @param {string[]} args - Array of args
    * @param {Function} fn - Callback
+   * @param {Object} [opts] - Opts for `spawn()`
+   * @returns {*} Parsed object
    */
-  runMochaJSON: function(fixturePath, args, fn) {
+  runMochaJSON: function(fixturePath, args, fn, opts) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    return invokeMocha(args.concat(['--reporter', 'json', path]), function(
-      err,
-      res
-    ) {
-      if (err) return fn(err);
+    return invokeMocha(
+      args.concat(['--reporter', 'json', path]),
+      function(err, res) {
+        if (err) return fn(err);
 
-      try {
-        var result = JSON.parse(res.output);
-        result.code = res.code;
-      } catch (err) {
-        return fn(err);
-      }
+        try {
+          var result = JSON.parse(res.output);
+          result.code = res.code;
+        } catch (err) {
+          return fn(err);
+        }
 
-      fn(null, result);
-    });
+        fn(null, result);
+      },
+      opts
+    );
   },
-  runMochaJSONRaw: function(fixturePath, args, fn) {
+  /**
+   * Invokes the mocha binary for the given fixture using the JSON reporter,
+   * returning the **raw** string output, as well as exit code.
+   *
+   * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
+   * want it.
+   * @param {string} fixturePath - Path from __dirname__
+   * @param {string[]} args - Array of args
+   * @param {Function} fn - Callback
+   * @param {Object} [opts] - Opts for `spawn()`
+   * @returns {string} Raw output
+   */
+  runMochaJSONRaw: function(fixturePath, args, fn, opts) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    return invokeSubMocha(args.concat(['--reporter', 'json', path]), function(
-      err,
-      resRaw
-    ) {
-      if (err) return fn(err);
+    return invokeSubMocha(
+      args.concat(['--reporter', 'json', path]),
+      function(err, resRaw) {
+        if (err) return fn(err);
 
-      fn(null, resRaw);
-    });
+        fn(null, resRaw);
+      },
+      opts
+    );
   },
 
   /**
@@ -96,6 +121,9 @@ module.exports = {
    * to pass. The callback is invoked with the exit code and output. Optional
    * current working directory as final parameter.
    *
+   * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
+   * want it.
+   *
    * In most cases runMocha should be used instead.
    *
    * Example response:
@@ -106,7 +134,7 @@ module.exports = {
    *
    * @param {Array<string>} args - Extra args to mocha executable
    * @param {Function} done - Callback
-   * @param {string} cwd - Current working directory for mocha run, optional
+   * @param {Object} [opts] - Options for `spawn()`
    */
   invokeMocha: invokeMocha,
 
@@ -116,27 +144,34 @@ module.exports = {
   resolveFixturePath: resolveFixturePath
 };
 
-function invokeMocha(args, fn, cwd) {
+function invokeMocha(args, fn, opts) {
   args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
 
-  return _spawnMochaWithListeners(args, fn, cwd);
+  return _spawnMochaWithListeners(args, fn, opts);
 }
 
-function invokeSubMocha(args, fn, cwd) {
+function invokeSubMocha(args, fn, opts) {
   args = [path.join(__dirname, '..', '..', 'bin', '_mocha')].concat(args);
 
-  return _spawnMochaWithListeners(args, fn, cwd);
+  return _spawnMochaWithListeners(args, fn, opts);
 }
 
-function _spawnMochaWithListeners(args, fn, cwd) {
+function _spawnMochaWithListeners(args, fn, opts) {
   var output = '';
-  var mocha = spawn(process.execPath, args, {cwd: cwd, env: {}});
+  opts = Object.assign(
+    {cwd: process.cwd()},
+    {stdio: ['pipe', 'pipe', 'ignore']},
+    opts || {}
+  );
+  var mocha = spawn(process.execPath, args, opts);
   var listener = function(data) {
     output += data;
   };
 
   mocha.stdout.on('data', listener);
-  mocha.stderr.on('data', listener);
+  if (mocha.stderr) {
+    mocha.stderr.on('data', listener);
+  }
   mocha.on('error', fn);
 
   mocha.on('close', function(code) {
