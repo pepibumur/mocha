@@ -13,6 +13,7 @@ const path = require('path');
 const getOptions = require('../lib/cli/options');
 const commands = require('../lib/cli/commands');
 const chalk = require('chalk');
+const {homepage, version} = require('../package.json');
 
 // ensure we can require() from current working directory
 module.paths.push(process.cwd(), path.resolve('node_modules'));
@@ -28,14 +29,19 @@ yargs
   .scriptName('mocha')
   .command(commands.run)
   .command(commands.init)
-  .alias('help', 'h')
   .updateStrings({
     'Positionals:': 'Positional Arguments',
-    'Options:': 'Other Options'
+    'Options:': 'Other Options',
+    'Commands:': 'Commands'
   })
   .fail((msg, err, yargs) => {
     yargs.showHelp();
     console.error(`\n${symbols.error} ${chalk.red('ERROR:')} ${msg}`);
   })
-  .epilog(`Read the docs at ${chalk.yellow('https://mochajs.org')}`)
+  .help('help', 'Show usage information & exit')
+  .alias('help', 'h')
+  .version('version', 'Show version number & exit', version)
+  .alias('version', 'V')
+  .wrap(80)
+  .epilog(`Website:\n  ${chalk.yellow(homepage)}`)
   .parse();

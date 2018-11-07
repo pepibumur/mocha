@@ -96,7 +96,7 @@ describe('methods', function() {
 
   describe('retries', function() {
     it('should return the number of retries', function() {
-      expect(this.retries(), 'to be', -1);
+      expect(this.retries(), 'to be', 0);
     });
   });
 });

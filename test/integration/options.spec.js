@@ -519,7 +519,6 @@ describe('options', function() {
             ['--watch'],
             function(err, data) {
               // After the process ends, this callback is ran
-              clearTimeout(t);
               if (err) {
                 done(err);
                 return;
@@ -532,10 +531,10 @@ describe('options', function() {
             },
             {stdio: 'pipe'}
           );
-          var t = setTimeout(function() {
+          setTimeout(function() {
             // kill the child process
             mocha.kill('SIGINT');
-          }, 500);
+          }, 1000);
         });
       });
     });

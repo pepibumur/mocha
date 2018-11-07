@@ -159,8 +159,10 @@ function invokeSubMocha(args, fn, opts) {
 function _spawnMochaWithListeners(args, fn, opts) {
   var output = '';
   opts = Object.assign(
-    {cwd: process.cwd()},
-    {stdio: ['pipe', 'pipe', 'ignore']},
+    {
+      cwd: process.cwd(),
+      stdio: ['pipe', 'pipe', 'ignore']
+    },
     opts || {}
   );
   var mocha = spawn(process.execPath, args, opts);
