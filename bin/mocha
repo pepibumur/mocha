@@ -7,10 +7,9 @@
  * when found, before invoking the "real" _mocha(1) executable.
  */
 
-const spawn = require('child_process').spawn;
-const path = require('path');
+const {spawn} = require('child_process');
 const getOptions = require('../lib/cli/options');
-const args = [path.join(__dirname, '_mocha')];
+const args = [require.resolve('./_mocha')];
 
 // Load mocha.opts into process.argv
 // Must be loaded here to handle node-specific options
