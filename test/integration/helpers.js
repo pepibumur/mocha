@@ -24,7 +24,7 @@ module.exports = {
    * }
    *
    * @param {string} fixturePath - Path to fixture .js file
-   * @param {Array<string>} args - Extra args to mocha executable
+   * @param {string[]} args - Extra args to mocha executable
    * @param {Function} fn - Callback
    * @param {Object} [opts] - Options for `spawn()`
    */
@@ -34,7 +34,7 @@ module.exports = {
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(
+    invokeSubMocha(
       args.concat(['-C', path]),
       function(err, res) {
         if (err) {
@@ -161,7 +161,7 @@ function _spawnMochaWithListeners(args, fn, opts) {
   opts = Object.assign(
     {
       cwd: process.cwd(),
-      stdio: ['pipe', 'pipe', 'ignore']
+      stdio: ['ignore', 'pipe', 'ignore']
     },
     opts || {}
   );
