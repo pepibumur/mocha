@@ -519,6 +519,7 @@
     "nyc": "^11.9.0",
     "package-json-versionify": "^1.0.4",
     "prettier-eslint-cli": "^4.7.1",
+    "rewiremock": "^3.11.1",
     "rimraf": "^2.5.2",
     "sinon": "^7.1.1",
     "svgo": "^0.7.2",

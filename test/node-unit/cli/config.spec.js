@@ -1,7 +1,8 @@
 'use strict';
 
-const {loadConfig, parsers} = require('../../../lib/cli/config');
+const {loadConfig, parsers, CONFIG_FILES} = require('../../../lib/cli/config');
 const sinon = require('sinon');
+const rewiremock = require('rewiremock/node');
 
 describe('cli/config', function() {
   let sandbox;
@@ -85,6 +86,42 @@ describe('cli/config', function() {
 
       it('should return an empty object', function() {
         expect(loadConfig('goo.yaml'), 'to equal', {});
+      });
+    });
+  });
+
+  describe('findConfig()', function() {
+    let findup;
+    let findConfig;
+
+    beforeEach(function() {
+      findup = sinon.stub().returns('/some/path/.mocharc.js');
+      rewiremock.enable();
+      findConfig = rewiremock.proxy(
+        require.resolve('../../../lib/cli/config'),
+        r => ({
+          'findup-sync': r.by(() => findup)
+        })
+      ).findConfig;
+    });
+
+    afterEach(function() {
+      rewiremock.disable();
+    });
+
+    it('should look for one of the config files using findup-sync', function() {
+      findConfig();
+      expect(findup, 'to have a call satisfying', {
+        args: [CONFIG_FILES, {cwd: process.cwd()}],
+        returned: '/some/path/.mocharc.js'
+      });
+    });
+
+    it('should support an explicit `cwd`', function() {
+      findConfig('/some/path/');
+      expect(findup, 'to have a call satisfying', {
+        args: [CONFIG_FILES, {cwd: '/some/path/'}],
+        returned: '/some/path/.mocharc.js'
       });
     });
   });
