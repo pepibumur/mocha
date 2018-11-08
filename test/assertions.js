@@ -96,7 +96,9 @@ exports.mixinMochaAssertions = function(expect) {
       expect,
       result
     ) {
-      expect(result, '[not] to have property', 'code', 0);
+      expect(result, '[not] to satisfy', {
+        code: expect.it('to be greater than', 0)
+      });
     })
     .addAssertion('<JSONRunResult> [not] to have test count <number>', function(
       expect,
