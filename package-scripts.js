@@ -241,6 +241,11 @@ module.exports = {
       description: 'Send code coverage report to coveralls (run during CI)',
       hiddenFromHelp: true
     },
+    'coverage-report': {
+      script: 'nyc report --reporter=html',
+      description:
+        'Output HTML coverage report to coverage/index.html (run tests with COVERAGE=1 first)'
+    },
     docs: {
       default: {
         script:
