@@ -30,7 +30,7 @@ describe('init command', function() {
         if (err) {
           return done(err);
         }
-        expect(result.code, 'to be', 1);
+        expect(result, 'to have failed');
         expect(result.output, 'to match', /not enough non-option arguments/i);
         done();
       },
@@ -43,7 +43,7 @@ describe('init command', function() {
       if (err) {
         return done(err);
       }
-      expect(result.code, 'to be', 0);
+      expect(result, 'to have succeeded');
       expect(fs.existsSync(path.join(tmpdir, 'mocha.css')), 'to be true');
       expect(fs.existsSync(path.join(tmpdir, 'mocha.js')), 'to be true');
       expect(fs.existsSync(path.join(tmpdir, 'tests.spec.js')), 'to be true');
