@@ -1,7 +1,7 @@
 'use strict';
 
 const {loadConfig, parsers, CONFIG_FILES} = require('../../../lib/cli/config');
-const sinon = require('sinon');
+const {createSandbox} = require('sinon');
 const rewiremock = require('rewiremock/node');
 
 describe('cli/config', function() {
@@ -9,7 +9,7 @@ describe('cli/config', function() {
   const config = {ok: true};
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
+    sandbox = createSandbox();
   });
 
   afterEach(function() {
