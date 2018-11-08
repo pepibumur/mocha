@@ -95,7 +95,7 @@ describe('cli/config', function() {
     let findConfig;
 
     beforeEach(function() {
-      findup = sinon.stub().returns('/some/path/.mocharc.js');
+      findup = sandbox.stub().returns('/some/path/.mocharc.js');
       rewiremock.enable();
       findConfig = rewiremock.proxy(
         require.resolve('../../../lib/cli/config'),
