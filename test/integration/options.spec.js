@@ -3,7 +3,6 @@
 var path = require('path');
 var helpers = require('./helpers');
 var runMochaJSON = helpers.runMochaJSON;
-var runMocha = helpers.runMocha;
 var runMochaJSONRaw = helpers.runMochaJSONRaw;
 var invokeMocha = helpers.invokeMocha;
 var resolvePath = helpers.resolveFixturePath;
