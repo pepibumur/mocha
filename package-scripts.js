@@ -54,6 +54,7 @@ module.exports = {
       node: {
         default: {
           script: `nps ${[
+            'build',
             'test.node.bdd',
             'test.node.tdd',
             'test.node.qunit',
