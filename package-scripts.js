@@ -61,7 +61,6 @@ module.exports = {
             'test.node.unit',
             'test.node.integration',
             'test.node.jsapi',
-            'test.node.compilers',
             'test.node.requires',
             'test.node.reporters',
             'test.node.only',
@@ -116,41 +115,6 @@ module.exports = {
           script: 'node test/jsapi',
           description: 'Run Node.js Mocha JavaScript API tests',
           hiddenFromHelp: true
-        },
-        compilers: {
-          default: {
-            script:
-              'nps test.node.compilers.coffee test.node.compilers.custom test.node.compilers.multiple',
-            description: 'Run Node.js --compilers flag tests (deprecated)',
-            hiddenFromHelp: true
-          },
-          coffee: {
-            script: test(
-              'compilers-coffee',
-              '--compilers coffee:coffee-script/register test/compiler'
-            ),
-            description:
-              'Run Node.js coffeescript compiler tests using --compilers flag (deprecated)',
-            hiddenFromHelp: true
-          },
-          custom: {
-            script: test(
-              'compilers-custom',
-              '--compilers foo:./test/compiler-fixtures/foo.fixture test/compiler'
-            ),
-            description:
-              'Run Node.js custom compiler tests using --compilers flag (deprecated)',
-            hiddenFromHelp: true
-          },
-          multiple: {
-            script: test(
-              'compilers-multiple',
-              '--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture test/compiler'
-            ),
-            description:
-              'Run Node.js multiple compiler tests using--compilers flag (deprecated)',
-            hiddenFromHelp: true
-          }
         },
         requires: {
           script: test(
