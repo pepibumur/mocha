@@ -312,7 +312,7 @@ describe('Base reporter', function() {
   });
 
   it('should interpret Chai custom error messages', function() {
-    this.timeout(2000);
+    this.timeout(3000);
     var chaiExpect = require('chai').expect;
     try {
       chaiExpect(43, 'custom error message').to.equal(42);
