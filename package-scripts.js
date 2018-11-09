@@ -92,7 +92,7 @@ module.exports = {
         unit: {
           script: test(
             'unit',
-            '"test/unit/*.spec.js" "test/node-unit/*.spec.js" --growl'
+            '"test/unit/*.spec.js" "test/node-unit/**/*.spec.js" --growl'
           ),
           description: 'Run Node.js unit tests'
         },
