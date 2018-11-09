@@ -497,7 +497,7 @@ describe('Suite', function() {
 
   describe('timeout()', function() {
     it('should convert a string to milliseconds', function() {
-      const suite = new Suite('some suite');
+      var suite = new Suite('some suite');
       suite.timeout('100');
       expect(suite.timeout(), 'to be', 100);
     });
