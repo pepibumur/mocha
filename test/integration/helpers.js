@@ -1,5 +1,6 @@
 'use strict';
 
+var format = require('util').format;
 var spawn = require('cross-spawn').spawn;
 var path = require('path');
 var baseReporter = require('../../lib/reporters/base');
@@ -74,7 +75,14 @@ module.exports = {
           var result = JSON.parse(res.output);
           result.code = res.code;
         } catch (err) {
-          return fn(err);
+          return fn(
+            new Error(
+              format(
+                'Failed to parse JSON reporter output from result:\n\n%O',
+                res
+              )
+            )
+          );
         }
 
         fn(null, result);
