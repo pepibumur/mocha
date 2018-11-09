@@ -91,7 +91,7 @@ describe('regressions', function() {
   });
 
   it('issue-2406: should run nested describe.only suites', function(done) {
-    this.timeout(2000);
+    this.timeout(3000);
     runJSON('regression/issue-2406.fixture.js', [], function(err, res) {
       if (err) {
         done(err);
