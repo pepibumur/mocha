@@ -559,7 +559,9 @@
     "bracketSpacing": false
   },
   "yargs": {
-    "combine-arrays": true
+    "combine-arrays": true,
+    "short-option-groups": false,
+    "dot-notation": false
   },
   "gitter": "https://gitter.im/mochajs/mocha"
 }
