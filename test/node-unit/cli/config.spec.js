@@ -70,8 +70,15 @@ describe('cli/config', function() {
     });
 
     describe('when supplied a filepath with unsupported extension', function() {
-      it('should ignore', function() {
-        expect(() => loadConfig('foo.bar'), 'not to throw');
+      beforeEach(function() {
+        sandbox.stub(parsers, 'yaml').returns(config);
+        sandbox.stub(parsers, 'json').returns(config);
+        sandbox.stub(parsers, 'js').returns(config);
+      });
+
+      it('should assume JSON', function() {
+        loadConfig('foo.bar');
+        expect(parsers.json, 'was called');
       });
     });
 
@@ -80,12 +87,8 @@ describe('cli/config', function() {
         sandbox.stub(parsers, 'yaml').throws();
       });
 
-      it('should eat the error', function() {
-        expect(() => loadConfig('goo.yaml'), 'not to throw');
-      });
-
-      it('should return an empty object', function() {
-        expect(loadConfig('goo.yaml'), 'to equal', {});
+      it('should throw', function() {
+        expect(() => loadConfig('goo.yaml'), 'to throw', /failed to parse/);
       });
     });
   });
