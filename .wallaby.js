@@ -4,7 +4,7 @@ module.exports = () => {
   return {
     files: [
       'index.js',
-      'lib/**/*.js',
+      'lib/**/*.{js,json}',
       'test/setup.js',
       'test/assertions.js',
       {
@@ -14,7 +14,10 @@ module.exports = () => {
       {
         pattern: 'test/unit/**/*.fixture.js',
         instrument: false
-      }
+      },
+      'package.json',
+      'test/opts/mocha.opts',
+      'mocharc.yml'
     ],
     filesWithNoCoverageCalculated: [
       'test/**/*.fixture.js',
