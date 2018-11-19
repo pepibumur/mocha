@@ -179,7 +179,7 @@ function execMochaWith(validate) {
       node +
         ' "' +
         path.join('..', '..', '..', '..', 'bin', 'mocha') +
-        '" -R json-stream --config /dev/null ' +
+        '" -R json-stream --no-config ' +
         glob,
       {cwd: path.join(__dirname, 'fixtures', 'glob')},
       function(error, stdout, stderr) {
