@@ -574,7 +574,7 @@ describe('options', function() {
     });
   });
 
-  describe.only('--fgrep and --grep', function() {
+  describe('--fgrep and --grep', function() {
     it('should conflict', function(done) {
       runMocha(
         'uncaught.fixture.js',

@@ -28,7 +28,7 @@ const defaults = {
   opts: '/default/path/to/mocha.opts'
 };
 
-describe.only('options', function() {
+describe('options', function() {
   let sandbox;
   let readFileSync;
   let findupSync;
