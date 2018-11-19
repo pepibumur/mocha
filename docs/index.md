@@ -1291,13 +1291,69 @@ The "HTML" reporter is what you see when running Mocha in the browser.  It looks
 
 [Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
 
+## Configuring Mocha (Node.js)
+
+> *Added in v6.0.0*
+
+In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
+
+- **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
+- **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
+- **JSON**: Create a `.mocharc.json` in your project's root directory.  Comments--while not valid JSON--are allowed in this file, and will be ignored by Mocha.
+- **`package.json`**: Create a `mocha` property in your project's `package.json`.
+
+Mocha suggests using one of the above strategies for configuration instead of the legacy `mocha.opts` format.
+
+### Custom Locations
+
+You can specify a custom location for your configuration file with the `--config <path>` option.  Mocha will use the file's extension to determine how to parse the file, and will assume JSON if unknown.
+
+You can specify a custom `package.json` location as well, using the `--package <path>` option.
+
+### Ignoring Config Files
+
+To skip looking for config files, use `--no-config`. Likewise, use `--no-package` to stop Mocha from looking for configuration in a `package.json`.
+
+### Priorities
+
+If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for--and use--only one.  The priority is:
+
+1. `.mocharc.js`
+1. `.mocharc.yaml`
+1. `.mocharc.yml`
+1. `.mocharc.json`
+
+### Merging
+
+Mocha will also *merge* any options found in `package.json` *and* `mocha.opts` into its run-time configuration.  In case of conflict, the priority is:
+
+1. Arguments specified on command-line
+1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
+1. `mocha` property of `package.json`
+1. `mocha.opts`
+
+Options which can safely be repeated (e.g., `--require`) will be *concatenated*, with higher-priorty configuration sources appearing first in the list.  For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
+
+### Extending Configuration
+
+Configurations can inherit from other modules using the `extends` keyword.  See [here](http://yargs.js.org/docs/#api-configobject-extends-keyword) for more information.
+
+### Configuration Format
+
+- Any "boolean" flag (which doesn't require a parameter, such as `--bail`), can be specified using a boolean value, e.g.: `"bail": true`.
+- Any "array"-type option (see `mocha --help` for a list) can be a single string value.
+- For options containing a dash (`-`), the option name can be specified using camelCase.
+- Aliases are valid names, e.g., `R` instead of `reporter`.
+- Test files can be specified using `spec`, e.g., `"spec": "test/**/*.spec.js"`.
+- Flags to `node` are *also* supported in configuration files, like in `mocha.opts`.  Use caution, as these can vary between versions of Node.js!
+
 ## `mocha.opts`
 
 Back on the server, Mocha will attempt to load `"./test/mocha.opts"` as a
-Run-Control file of sorts.
+run-control file of sorts.
 
 Beginning-of-line comment support is available; any line _starting_ with a
-hash (#) symbol will be considered a comment. Blank lines may also be used.
+hash (`#`) symbol will be considered a comment. Blank lines may also be used.
 Any other line will be treated as a command-line argument (along with any
 associated option value) to be used as a default setting. Settings should be
 specified one per line.
@@ -1323,6 +1379,8 @@ and changing the reporter to `list`:
 ```sh
 $ mocha --reporter list --growl
 ```
+
+To ignore your `mocha.opts`, use the `--no-opts` option.
 
 ## The `test/` Directory
 
