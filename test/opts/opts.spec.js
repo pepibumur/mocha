@@ -1,21 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-
-// as of v6.0.0 we no longer use `mocha.opts` by default, which means
-// we must provide `--opts` on command line to run this test file
-describe('mocha.opts', function() {
-  it('should not duplicate mocha.opts args in process.argv', function() {
-    var processArgv = process.argv.join('');
-    var mochaOpts = fs
-      .readFileSync(path.join(__dirname, 'mocha.opts'), 'utf-8')
-      .replace(/^#.*$/gm, '')
-      .split(/[\s]+/)
-      .join('');
-    expect(processArgv.indexOf(mochaOpts), 'not to be', -1).and(
-      'to be',
-      processArgv.lastIndexOf(mochaOpts)
-    );
+// as of this writing we're using a config file instead of mocha.opts,
+// so to run this test, we must use `--opts test/opts/mocha.opts`
+// and `--no-config`.
+describe('--opts', function() {
+  it('should use options present in test `mocha.opts`', function() {
+    // this will fail if config file was used and/or mocha.opts didn't load.
+    expect(this.timeout(), 'to be', 300);
   });
 });

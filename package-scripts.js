@@ -107,7 +107,7 @@ module.exports = {
         opts: {
           script: test(
             'opts',
-            '--opts test/opts/mocha.opts test/opts/opts.spec.js'
+            '--opts test/opts/mocha.opts test/opts/opts.spec.js --no-config'
           ),
           description: 'Run tests concerning mocha.opts',
           hiddenFromHelp: true
