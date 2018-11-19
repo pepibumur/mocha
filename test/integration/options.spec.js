@@ -2,6 +2,7 @@
 
 var path = require('path');
 var helpers = require('./helpers');
+var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 var runMochaJSONRaw = helpers.runMochaJSONRaw;
 var invokeMocha = helpers.invokeMocha;
@@ -570,6 +571,22 @@ describe('options', function() {
         expect(result.code, 'to be', 1);
         done();
       });
+    });
+  });
+
+  describe.only('--fgrep and --grep', function() {
+    it('should conflict', function(done) {
+      runMocha(
+        'uncaught.fixture.js',
+        ['--fgrep', 'first', '--grep', 'second'],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(result, 'to have failed');
+          done();
+        }
+      );
     });
   });
 });
