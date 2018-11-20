@@ -5,9 +5,11 @@ const {isNodeFlag, impliesNoTimeouts} = require('../../../lib/cli/node-flags');
 
 describe('node-flags', function() {
   describe('isNodeFlag()', function() {
-    describe('for all allowed node enviornment flags', function() {
-      it('should return true', function() {
-        nodeEnvFlags.forEach(envFlag => {
+    describe('for all allowed node environment flags', function() {
+      // NOTE: this is not stubbing nodeEnvFlags in any way, so relies on
+      // the userland polyfill to be correct.
+      nodeEnvFlags.forEach(envFlag => {
+        it(`${envFlag} should return true`, function() {
           expect(isNodeFlag(envFlag), 'to be true');
         });
       });
