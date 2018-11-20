@@ -67,8 +67,8 @@ jobs:
       env: null
       before_install: true
       install: npm install --production
-      # `--config /dev/null` means "ignore .mocharc.yml"
-      script: ./bin/mocha --config /dev/null --reporter spec test/sanity/sanity.spec.js
+
+      script: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
       cache:
         directories:
           - ~/.npm
