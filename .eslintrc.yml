@@ -30,7 +30,7 @@ overrides:
     env:
       browser: no
   - files:
-    - test/**/*.js
+    - test/**/*.{js,mjs}
     env:
       mocha: yes
     globals:
@@ -39,4 +39,10 @@ overrides:
     - doc/**/*.js
     env:
       node: no
+  - files:
+    - test/**/*.mjs
+    parserOptions:
+      ecmaVersion: 6
+      sourceType: module
+
 
