@@ -141,8 +141,8 @@ module.exports = config => {
       // support
       cfg.browsers = ['ChromeHeadless'];
       cfg.files = [
-        'test/browser-specific/esm.spec.js',
-        'test/browser-fixtures/esm.fixture.html'
+        {pattern: 'test/browser-fixtures/esm.fixture.mjs', type: 'module'},
+        {pattern: 'test/browser-specific/esm.spec.mjs', type: 'module'}
       ];
       break;
     default:
