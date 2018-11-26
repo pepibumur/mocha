@@ -11,9 +11,7 @@ describe('Mocha', function() {
       var mocha = new Mocha(blankOpts);
       // we must end this test when it's actually done, or Bad Weirdness can occur
       // w/r/t delayed root suite
-      mocha.run().on('end', function() {
-        done();
-      });
+      mocha.run().on('end', done);
     });
 
     it('should execute the callback when complete', function(done) {
@@ -41,7 +39,9 @@ describe('Mocha', function() {
 
     it('should emit start event', function(done) {
       var mocha = new Mocha(blankOpts);
-      mocha.run().on('start', done);
+      mocha.run().on('start', function() {
+        this.on('end', done);
+      });
     });
 
     it('should emit end event', function(done) {
