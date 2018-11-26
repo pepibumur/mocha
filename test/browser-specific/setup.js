@@ -1,2 +1,5 @@
-/* eslint strict:off */
-window.expect = window.weknowhow.expect;
+'use strict';
+
+process.stdout = require('browser-stdout')();
+
+global.expect = global.weknowhow.expect;
