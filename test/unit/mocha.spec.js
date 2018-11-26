@@ -7,9 +7,13 @@ describe('Mocha', function() {
   var blankOpts = {reporter: function() {}}; // no output
 
   describe('.run(fn)', function() {
-    it('should not raise errors if callback was not provided', function() {
+    it('should not raise errors if callback was not provided', function(done) {
       var mocha = new Mocha(blankOpts);
-      mocha.run();
+      // we must end this test when it's actually done, or Bad Weirdness can occur
+      // w/r/t delayed root suite
+      mocha.run().on('end', function() {
+        done();
+      });
     });
 
     it('should execute the callback when complete', function(done) {
